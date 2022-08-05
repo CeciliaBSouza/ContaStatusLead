@@ -1,0 +1,16 @@
+public class AccountBO {
+    
+        public static string buscaContasCNPJ (string CNPJ){
+            
+         List<Account> retornoIdentidade = [SELECT Id FROM Account WHERE CNPJ__c=:CNPJ LIMIT 1];    
+         
+            if(retornoIdentidade.size()>0){
+                return retornoIdentidade[0].Id;
+            } else {
+                
+       
+                return null;
+            }
+
+}
+}
