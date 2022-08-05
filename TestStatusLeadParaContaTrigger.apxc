@@ -1,0 +1,50 @@
+@isTest
+public class TestStatusLeadParaContaTrigger {
+    
+    @isTest
+    public static void Cenario1(){
+         	   
+     Lead TesteLead		= new Lead();
+        TesteLead.LastName		= 'Test';
+        TesteLead.Company	= 'Test';
+        TesteLead.CNPJ__c='44444444444444';
+        TesteLead.Solar__c=true;
+        TesteLead.Status='Novo';
+        TesteLead.Estado_de_instala_o__c='MT';
+              
+         insert TesteLead;
+         TesteLead.Status='Contactado';
+		 update TesteLead;
+        
+                Account TesteAcc = [SELECT Id,Name FROM Account WHERE CNPJ__c =: TesteLead.CNPJ__c LIMIT 1];       
+        system.assert(TesteAcc.Name==TesteLead.Company, 'Não está associando a função');
+        
+                }
+    @isTest
+    public static void Cenario2(){
+      Account ContaTeste = new Account (
+      Name= 'Opa'      ,
+      CNPJ__c='44444444444444'
+      );
+      insert ContaTeste;
+        
+     Lead TesteLead		= new Lead();
+        TesteLead.LastName		= 'Test';
+        TesteLead.Company	= 'Test';
+        TesteLead.CNPJ__c='44444444444444';
+        TesteLead.Solar__c=true;
+        TesteLead.Status='Novo';
+        TesteLead.Estado_de_instala_o__c='MT';
+              
+         insert TesteLead;
+         TesteLead.Status='Contactado';
+		 update TesteLead;
+        
+                Account TesteAcc = [SELECT Id,Name FROM Account WHERE CNPJ__c =: TesteLead.CNPJ__c LIMIT 1];       
+        system.assert(TesteAcc.Name==TesteLead.Company, 'Não está associando a função');
+        
+               
+        
+    }
+
+}
