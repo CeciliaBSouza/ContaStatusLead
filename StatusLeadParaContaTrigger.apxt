@@ -1,0 +1,43 @@
+trigger StatusLeadParaContaTrigger on Lead (before insert,before update,after insert,after update) {
+    
+    if(Trigger.isAfter)  { 	
+            if(Trigger.isUpdate){
+   
+                   for(Lead LeadRegistroNovo: Trigger.New){
+                       Lead LeadRegistroAntigo = Trigger.oldMap.get(LeadRegistroNovo.Id);
+                       
+                        if(LeadRegistroAntigo.status=='Novo'&& LeadRegistroNovo.status=='Contactado'){
+                            
+                            if(LeadRegistroNovo.CNPJ__c!=null){
+                                
+                              string IdentidadeContaResgatada = BOAccountAuxTrigger.buscaContasCNPJ(LeadRegistroNovo.CNPJ__c);
+                                  
+                                  if(IdentidadeContaResgatada!=null){
+                                        Account ContaResgatada = new Account(
+                                        Id=IdentidadeContaResgatada,
+                                        Name=LeadRegistroNovo.Company
+                                       
+                                        );
+                                      
+                                        update ContaResgatada;
+                                      
+                      		      }else if(IdentidadeContaResgatada==null) {    
+                                        Account NovaConta = new Account (
+                                        Name=LeadRegistroNovo.Company,
+                                        CNPJ__c=LeadRegistroNovo.CNPJ__c,
+                                        Eolica__c=LeadRegistroNovo.Eolica__c,
+                                        Solar__c=LeadRegistroNovo.Solar__c
+                                        );
+                                        insert NovaConta;
+                                
+                                }
+                      
+                    
+              }
+             
+         }
+
+    }
+}
+}
+}
